@@ -25,7 +25,6 @@ I included:
 - Decal - https://opengameart.org/content/bullet-decal
 - Muzzle Flash - https://opengameart.org/content/muzzle-flash-with-model
 - Skeleton https://imrequ.itch.io/voxel-game-models-starter-pack
-- 
 
 ## Future Development
 No plans for future development
