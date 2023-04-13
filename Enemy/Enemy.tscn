@@ -1,0 +1,44 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://Enemy/Enemy.gd" type="Script" id=1]
+[ext_resource path="res://Assets/Characters-0.obj" type="ArrayMesh" id=2]
+
+[sub_resource type="BoxShape" id=2]
+extents = Vector3( 0.515058, 1.06016, 0.166353 )
+
+[sub_resource type="SphereShape" id=3]
+radius = 4.0
+
+[sub_resource type="BoxShape" id=4]
+extents = Vector3( 0.250709, 1.04701, 1 )
+
+[node name="Enemy" type="KinematicBody" groups=["Enemy"]]
+script = ExtResource( 1 )
+
+[node name="CollisionShape" type="CollisionShape" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00962073, 0.991396, 0.057796 )
+shape = SubResource( 2 )
+
+[node name="Growl" type="Area" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.01696, 0 )
+
+[node name="CollisionShape" type="CollisionShape" parent="Growl"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0586152, 0 )
+shape = SubResource( 3 )
+
+[node name="Spatial" type="Spatial" parent="."]
+transform = Transform( -0.4, 0, -3.49691e-08, 0, 0.4, 0, 3.49691e-08, 0, -0.4, 0, 0, 0 )
+
+[node name="skeleton" type="MeshInstance" parent="Spatial"]
+transform = Transform( 0.75, 0, 0, 0, 0.75, 0, 0, 0, 0.75, 0, 0, 0 )
+mesh = ExtResource( 2 )
+skeleton = NodePath("../..")
+
+[node name="Kill" type="Area" parent="."]
+
+[node name="CollisionShape" type="CollisionShape" parent="Kill"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0443598, 1.11452, 0.0110369 )
+shape = SubResource( 4 )
+
+[connection signal="body_entered" from="Growl" to="." method="_on_Growl_body_entered"]
+[connection signal="body_entered" from="Kill" to="." method="_on_Kill_body_entered"]

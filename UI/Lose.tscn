@@ -1,0 +1,81 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://UI/Main.gd" type="Script" id=1]
+[ext_resource path="res://UI/new button.tres" type="Theme" id=2]
+[ext_resource path="res://Assets/TheNeue-Black.ttf" type="DynamicFontData" id=3]
+
+[sub_resource type="Shader" id=1]
+code = "shader_type canvas_item;
+
+uniform float scale: hint_range(0.0,1.0) = 1.0;
+uniform float time_scale: hint_range(0.0,2.0) = 1.0;
+
+
+void fragment()
+{
+    //set the uv to a proper size on the center of screen 
+    vec2 uv = (FRAGCOORD.xy - 0.5 * (scale / SCREEN_PIXEL_SIZE.xy)) / min(scale / SCREEN_PIXEL_SIZE.x, scale / SCREEN_PIXEL_SIZE.y);
+    // set rotation angle value
+    float rot = radians(0.0);
+    // this set rotation by time and 
+    rot = TIME * time_scale;
+    // algebra formula for rotation by matrix , https://en.wikipedia.org/wiki/Rotation_matrix
+    mat2 m = mat2( vec2( cos(rot), -sin(rot) ), vec2( sin(rot), cos(rot) ) );
+    // rotation of uv with matrix algebra formula where is set the rotation angle 
+    uv = m* uv;
+    // define float by function module from 1.0 and uv.x - uv.y
+    float d = mod(uv.x - uv.y, 1.0);
+    // color for fragColor is value of fload d by module function
+    vec4 col = vec4(vec3(d), 1.0);
+    COLOR = vec4(col);
+}"
+
+[sub_resource type="ShaderMaterial" id=2]
+shader = SubResource( 1 )
+shader_param/scale = 0.256
+shader_param/time_scale = 0.25
+
+[sub_resource type="DynamicFont" id=3]
+size = 42
+outline_size = 3
+outline_color = Color( 0.388235, 0, 0, 1 )
+font_data = ExtResource( 3 )
+
+[node name="Lose" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 1 )
+
+[node name="Background" type="ColorRect" parent="."]
+material = SubResource( 2 )
+margin_right = 1024.0
+margin_bottom = 600.0
+color = Color( 0.266667, 0.266667, 0.266667, 1 )
+
+[node name="Label" type="Label" parent="."]
+margin_right = 1024.0
+margin_bottom = 374.0
+custom_fonts/font = SubResource( 3 )
+text = "The skeletons got you! :(
+You lose!"
+align = 1
+valign = 1
+
+[node name="Play" type="Button" parent="."]
+margin_left = 456.0
+margin_top = 302.0
+margin_right = 586.0
+margin_bottom = 342.0
+theme = ExtResource( 2 )
+text = "Play Again?"
+
+[node name="Quit" type="Button" parent="."]
+margin_left = 466.0
+margin_top = 369.0
+margin_right = 566.0
+margin_bottom = 409.0
+theme = ExtResource( 2 )
+text = "Quit"
+
+[connection signal="pressed" from="Play" to="." method="_on_Play_pressed"]
+[connection signal="pressed" from="Quit" to="." method="_on_Quit_pressed"]
